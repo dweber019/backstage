@@ -1,0 +1,13 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: website-proxy-example
+  description: This is an example
+  tags:
+    - website-proxy
+  annotations:
+    website-proxy/w3schools: https://www.w3schools.com/
+spec:
+  type: website
+  lifecycle: production
+  owner: team-b
