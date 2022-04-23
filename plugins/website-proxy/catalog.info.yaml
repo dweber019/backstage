@@ -6,7 +6,7 @@ metadata:
   tags:
     - website-proxy
   annotations:
-    website-proxy/w3schools: https://www.w3schools.com/
+    website-proxy/w3schools: http://httpbin.org/#/HTTP_Methods?bubu=lala
 spec:
   type: website
   lifecycle: production

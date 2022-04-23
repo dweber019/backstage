@@ -59,6 +59,7 @@ import jenkins from './plugins/jenkins';
 import permission from './plugins/permission';
 import { PluginEnvironment } from './types';
 import { ServerPermissionClient } from '@backstage/plugin-permission-node';
+import websiteProxy from './plugins/website-proxy';
 
 function makeCreateEnv(config: Config) {
   const root = getRootLogger();
@@ -133,6 +134,9 @@ async function main() {
     createEnv('tech-insights'),
   );
   const permissionEnv = useHotMemoize(module, () => createEnv('permission'));
+  const websiteProxyEnv = useHotMemoize(module, () =>
+    createEnv('websiteProxy'),
+  );
 
   const apiRouter = Router();
   apiRouter.use('/catalog', await catalog(catalogEnv));
@@ -152,6 +156,7 @@ async function main() {
   apiRouter.use('/badges', await badges(badgesEnv));
   apiRouter.use('/jenkins', await jenkins(jenkinsEnv));
   apiRouter.use('/permission', await permission(permissionEnv));
+  apiRouter.use('/website-proxy', await websiteProxy(websiteProxyEnv));
   apiRouter.use(notFoundHandler());
 
   const service = createServiceBuilder(module)

@@ -51,6 +51,7 @@
 /plugins/techdocs                                 @backstage/reviewers @backstage/techdocs-core
 /plugins/techdocs-*                               @backstage/reviewers @backstage/techdocs-core
 /plugins/website-proxy                            @backstage/reviewers @dweber019
+/plugins/website-proxy-backend                    @dweber019
 /tech-insights-backend                            @backstage/reviewers @xantier @iain-b
 /tech-insights-backend-module-jsonfc              @backstage/reviewers @xantier @iain-b
 /tech-insights-tech-insights-common               @backstage/reviewers @xantier @iain-b

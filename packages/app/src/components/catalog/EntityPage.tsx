@@ -108,6 +108,10 @@ import { EntityTechdocsContent } from '@backstage/plugin-techdocs';
 import { EntityTodoContent } from '@backstage/plugin-todo';
 import { Button, Grid } from '@material-ui/core';
 import BadgeIcon from '@material-ui/icons/CallToAction';
+import {
+  EntityWebsiteProxyCard,
+  isWebsiteProxyAvailable,
+} from '@backstage/plugin-website-proxy';
 
 import {
   EntityGithubInsightsContent,
@@ -357,6 +361,16 @@ const overviewContent = (
     <Grid item md={8} xs={12}>
       <EntityHasSubcomponentsCard variant="gridItem" />
     </Grid>
+
+    <EntitySwitch>
+      <EntitySwitch.Case
+        if={entity => isWebsiteProxyAvailable('w3schools', entity)}
+      >
+        <Grid item xs={6} style={{ height: '300px' }}>
+          <EntityWebsiteProxyCard name="w3schools" disableViewHeight useProxy />
+        </Grid>
+      </EntitySwitch.Case>
+    </EntitySwitch>
   </Grid>
 );
 
@@ -492,6 +506,10 @@ const websiteEntityPage = (
 
     <EntityLayout.Route path="/todos" title="TODOs">
       <EntityTodoContent />
+    </EntityLayout.Route>
+
+    <EntityLayout.Route path="/w3schools" title="w3schools">
+      <EntityWebsiteProxyCard name="w3schools" useProxy />
     </EntityLayout.Route>
   </EntityLayoutWrapper>
 );

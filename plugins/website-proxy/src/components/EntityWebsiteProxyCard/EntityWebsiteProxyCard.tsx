@@ -18,6 +18,7 @@ import { Entity } from '@backstage/catalog-model';
 import { useEntity } from '@backstage/plugin-catalog-react';
 import { Alert } from '@material-ui/lab';
 import { makeStyles } from '@material-ui/core';
+import { configApiRef, useApi } from '@backstage/core-plugin-api';
 
 /**
  * Constant storing the website-proxy url.
@@ -45,10 +46,17 @@ export const isWebsiteProxyAvailable = (
   false;
 
 const getUrl = (name: string, entity: Entity) =>
-  entity.metadata.annotations?.[getAnnotation(name)];
+  entity.metadata.annotations?.[getAnnotation(name)] || '';
 
-const getContent = (name: string, entity: Entity) =>
-  entity.metadata.annotations?.[getAnnotation(name)];
+const getContentWithProxy = (
+  name: string,
+  entity: Entity,
+  backendUrl: string,
+) => {
+  return `${backendUrl}/api/website-proxy?url=${encodeURIComponent(
+    getUrl(name, entity),
+  )}`;
+};
 
 const useStyles = makeStyles(() => ({
   embed: {
@@ -67,6 +75,8 @@ export const EntityWebsiteProxyCard = ({
 }) => {
   const classes = useStyles();
   const { entity } = useEntity();
+  const config = useApi(configApiRef);
+  const backendUrl = config.getString('backend.baseUrl');
 
   if (!getUrl(name, entity)) {
     return (
@@ -80,7 +90,11 @@ export const EntityWebsiteProxyCard = ({
   return (
     <embed
       type="text/html"
-      src={getUrl(name, entity)}
+      src={
+        Boolean(useProxy)
+          ? getContentWithProxy(name, entity, backendUrl)
+          : getUrl(name, entity)
+      }
       className={classes.embed}
       style={{ height: disableViewHeight ? '100%' : '100vh' }}
     />
