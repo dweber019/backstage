@@ -19,6 +19,7 @@
 <tbody>
 <tr><td><a href="/docs/reference/backend-tasks.taskscheduledefinition.frequency">frequency</a></td><td>{ cron: string; } | Duration</td><td>How often you want the task to run. The system does its best to avoid overlapping invocations.</td></tr>
 <tr><td><a href="/docs/reference/backend-tasks.taskscheduledefinition.initialdelay">initialDelay?</a></td><td>Duration</td><td><i>(Optional)</i> The amount of time that should pass before the first invocation happens.</td></tr>
+<tr><td><a href="/docs/reference/backend-tasks.taskscheduledefinition.scope">scope?</a></td><td>'global' | 'local'</td><td><i>(Optional)</i> Sets the scope of concurrency control / locking to apply for invocations of this task.</td></tr>
 <tr><td><a href="/docs/reference/backend-tasks.taskscheduledefinition.timeout">timeout</a></td><td>Duration</td><td>The maximum amount of time that a single task invocation can take, before it's considered timed out and gets &quot;released&quot; such that a new invocation is permitted to take place (possibly, then, on a different worker).</td></tr>
 </tbody>
 </table>
