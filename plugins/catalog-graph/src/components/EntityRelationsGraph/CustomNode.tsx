@@ -14,7 +14,10 @@
  * limitations under the License.
  */
 import { DependencyGraphTypes } from '@backstage/core-components';
-import { humanizeEntityRef } from '@backstage/plugin-catalog-react';
+import {
+  EntityPeekAheadPopover,
+  humanizeEntityRef,
+} from '@backstage/plugin-catalog-react';
 import { BackstageTheme } from '@backstage/theme';
 import { makeStyles } from '@material-ui/core/styles';
 import classNames from 'classnames';
@@ -66,6 +69,7 @@ export function CustomNode({
     color = 'default',
     focused,
     title,
+    tooltipTitle,
     onClick,
   },
 }: DependencyGraphTypes.RenderNodeProps<EntityNodeData>) {
@@ -103,46 +107,49 @@ export function CustomNode({
 
   return (
     <g onClick={onClick} className={classNames(onClick && classes.clickable)}>
-      <rect
-        className={classNames(
-          classes.node,
-          color === 'primary' && 'primary',
-          color === 'secondary' && 'secondary',
+      <EntityPeekAheadPopover entityRef={`${kind}:${namespace}/${name}`}>
+        <rect
+          className={classNames(
+            classes.node,
+            color === 'primary' && 'primary',
+            color === 'secondary' && 'secondary',
+          )}
+          width={paddedWidth}
+          height={paddedHeight}
+          rx={10}
+        />
+        {kind && (
+          <EntityKindIcon
+            kind={kind}
+            y={padding}
+            x={padding}
+            width={iconSize}
+            height={iconSize}
+            className={classNames(
+              classes.text,
+              focused && 'focused',
+              color === 'primary' && 'primary',
+              color === 'secondary' && 'secondary',
+            )}
+          />
         )}
-        width={paddedWidth}
-        height={paddedHeight}
-        rx={10}
-      />
-      {kind && (
-        <EntityKindIcon
-          kind={kind}
-          y={padding}
-          x={padding}
-          width={iconSize}
-          height={iconSize}
+        <text
+          ref={idRef}
           className={classNames(
             classes.text,
             focused && 'focused',
             color === 'primary' && 'primary',
             color === 'secondary' && 'secondary',
           )}
-        />
-      )}
-      <text
-        ref={idRef}
-        className={classNames(
-          classes.text,
-          focused && 'focused',
-          color === 'primary' && 'primary',
-          color === 'secondary' && 'secondary',
-        )}
-        y={paddedHeight / 2}
-        x={paddedIconWidth + (width + padding * 2) / 2}
-        textAnchor="middle"
-        alignmentBaseline="middle"
-      >
-        {displayTitle}
-      </text>
+          y={paddedHeight / 2}
+          x={paddedIconWidth + (width + padding * 2) / 2}
+          textAnchor="middle"
+          alignmentBaseline="middle"
+        >
+          {displayTitle}
+        </text>
+        {tooltipTitle && <title>{tooltipTitle}</title>}
+      </EntityPeekAheadPopover>
     </g>
   );
 }

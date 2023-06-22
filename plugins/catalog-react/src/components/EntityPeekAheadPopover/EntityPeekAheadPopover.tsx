@@ -116,85 +116,81 @@ export const EntityPeekAheadPopover = (props: EntityPeekAheadPopoverProps) => {
 
   return (
     <>
-      <Typography component="span" onMouseEnter={debouncedHandleMouseEnter}>
+      <React.Fragment onMouseEnter={debouncedHandleMouseEnter}>
         <Typography
-          component="span"
+          component="a"
           data-testid="trigger"
           {...bindHover(popupState)}
         >
           {children}
         </Typography>
-      </Typography>
-      {isHovered && (
-        <HoverPopover
-          PaperProps={{
-            className: classes.popoverPaper,
-          }}
-          {...bindPopover(popupState)}
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'center',
-          }}
-          transformOrigin={{
-            vertical: 'top',
-            horizontal: 'center',
-          }}
-          onMouseLeave={handleOnMouseLeave}
-        >
-          <Card>
-            <CardContent>
-              {error && <ResponseErrorPanel error={error} />}
-              {loading && <Progress />}
-              {entity && (
-                <>
-                  <Typography color="textSecondary">
-                    {entity.metadata.namespace}
+      </React.Fragment>
+      <HoverPopover
+        PaperProps={{
+          className: classes.popoverPaper,
+        }}
+        {...bindPopover(popupState)}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'center',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }}
+        onMouseLeave={handleOnMouseLeave}
+      >
+        <Card>
+          <CardContent>
+            {error && <ResponseErrorPanel error={error} />}
+            {loading && <Progress />}
+            {entity && (
+              <>
+                <Typography color="textSecondary">
+                  {entity.metadata.namespace}
+                </Typography>
+                <Typography variant="h5" component="div">
+                  {entity.metadata.name}
+                </Typography>
+                <Typography color="textSecondary" gutterBottom>
+                  {entity.kind}
+                </Typography>
+                {entity.metadata.description && (
+                  <Typography
+                    className={classes.descriptionTypography}
+                    paragraph
+                  >
+                    {entity.metadata.description}
                   </Typography>
-                  <Typography variant="h5" component="div">
-                    {entity.metadata.name}
-                  </Typography>
-                  <Typography color="textSecondary" gutterBottom>
-                    {entity.kind}
-                  </Typography>
-                  {entity.metadata.description && (
-                    <Typography
-                      className={classes.descriptionTypography}
-                      paragraph
-                    >
-                      {entity.metadata.description}
-                    </Typography>
-                  )}
-                  <Typography>{entity.spec?.type}</Typography>
-                  <Box marginTop="0.5em">
-                    {(entity.metadata.tags || [])
-                      .slice(0, maxTagChips)
-                      .map(tag => {
-                        return <Chip key={tag} size="small" label={tag} />;
-                      })}
-                    {entity.metadata.tags?.length &&
-                      entity.metadata.tags?.length > maxTagChips && (
-                        <Tooltip title="Drill into the entity to see all of the tags.">
-                          <Chip key="other-tags" size="small" label="..." />
-                        </Tooltip>
-                      )}
-                  </Box>
-                </>
-              )}
-            </CardContent>
-            {!error && entity && (
-              <CardActions>
-                <>
-                  {isUserEntity(entity) && <UserCardActions entity={entity} />}
-                  {isGroupEntity(entity) && (
-                    <GroupCardActions entity={entity} />
-                  )}
-                  <EntityCardActions entity={entity} />
-                </>
-              </CardActions>
+                )}
+                <Typography>{entity.spec?.type}</Typography>
+                <Box marginTop="0.5em">
+                  {(entity.metadata.tags || [])
+                    .slice(0, maxTagChips)
+                    .map(tag => {
+                      return <Chip key={tag} size="small" label={tag} />;
+                    })}
+                  {entity.metadata.tags?.length &&
+                    entity.metadata.tags?.length > maxTagChips && (
+                      <Tooltip title="Drill into the entity to see all of the tags.">
+                        <Chip key="other-tags" size="small" label="..." />
+                      </Tooltip>
+                    )}
+                </Box>
+              </>
             )}
-          </Card>
-        </HoverPopover>
-      )}
+          </CardContent>
+          {!error && entity && (
+            <CardActions>
+              <>
+                {isUserEntity(entity) && <UserCardActions entity={entity} />}
+                {isGroupEntity(entity) && <GroupCardActions entity={entity} />}
+                <EntityCardActions entity={entity} />
+              </>
+            </CardActions>
+          )}
+        </Card>
+      </HoverPopover>
     </>
   );
 };
